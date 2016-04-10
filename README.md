@@ -87,3 +87,13 @@ curl -H "Content-Type: application/json" -X POST -d '{"message": "it works?", "p
   "status": "success"
 }
 ```
+
+## Running Tests
+
+```
+$ pip install nose==1.3.7
+```
+
+```
+$ nosetests
+```
