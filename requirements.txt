@@ -1,5 +1,6 @@
 BeautifulSoup==3.2.1
 Flask==0.10.1
 gunicorn==19.4.5
+pika==0.10.0
 pygooglevoice==0.5.1
 pymongo==3.2.2

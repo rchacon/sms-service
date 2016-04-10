@@ -17,12 +17,20 @@ $ export MONGO_URI=<MONGO_URI>
 
 If not set, the following URI will be used: `mongodb://localhost:27017/sms`.
 
+You are also going to need RabbitMQ
+
 ## Usage
 
 Run Scraper
 
 ```
 $ python scraper.py
+```
+
+Run rabbitmq workers
+
+```
+$ python worker.py
 ```
 
 Run Web application in development mode
@@ -33,11 +41,14 @@ $ python app.py
 
 Run Web application in production mode
 
+
 ```
 $ gunicorn app:app --workers=4
 ```
 
-REST API Documentation
+## REST API Documentation
+
+Get all text messages exchanged with some phone number.
 
 GET `/api/sms?phone=(510)%20555-5555`
 
@@ -60,5 +71,19 @@ GET `/api/sms?phone=(510)%20555-5555`
       "time": "8:41 AM"
     }
   ]
+}
+```
+
+Send a text message.
+
+POST `/api/sms`
+
+```
+curl -H "Content-Type: application/json" -X POST -d '{"message": "it works?", "phone": "5105555555"}' http://localhost:5000/api/sms
+```
+
+```
+{
+  "status": "success"
 }
 ```
