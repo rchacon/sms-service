@@ -1,4 +1,7 @@
+"""Web application."""
+
 import json
+import os
 
 from flask import abort, Flask, jsonify, request
 import pika
@@ -13,6 +16,7 @@ mongo = Mongo(app)
 
 @app.errorhandler(400)
 def bad_request(e):
+    """Jsonify 400 response."""
     resp = jsonify({'error': str(e)})
     resp.status_code = 400
 
@@ -21,6 +25,7 @@ def bad_request(e):
 
 @app.route('/api/sms', methods=['GET', 'POST'])
 def get_sms():
+    """SMS endpoint for retrieving and sending messages."""
     if request.method == 'POST':
         data = request.get_json()
         if 'message' not in data or 'phone' not in data:
@@ -52,10 +57,10 @@ def get_sms():
 
 
 def new_task(data):
-    """Add task to rabbit
-    """
+    """Add task to rabbit."""
+    rabbit_host = os.getenv('RABBIT_HOST', 'localhost')
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters('localhost')
+        pika.ConnectionParameters(rabbit_host)
     )
     channel = connection.channel()
     channel.basic_publish(
@@ -63,7 +68,7 @@ def new_task(data):
         routing_key='task_queue',
         body=json.dumps(data),
         properties=pika.BasicProperties(
-         delivery_mode=2, # make message persistent
+            delivery_mode=2,  # make message persistent
         )
     )
     connection.close()

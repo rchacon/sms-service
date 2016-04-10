@@ -1,6 +1,7 @@
 """
 Listen to rabbit and send text messages
 """
+import os
 import json
 
 import pika
@@ -29,8 +30,9 @@ def callback(ch, method, properties, body):
 
 
 def main():
+    rabbit_host = os.getenv('RABBIT_HOST', 'localhost')
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost')
+        pika.ConnectionParameters(host=rabbit_host)
     )
 
     channel = connection.channel()

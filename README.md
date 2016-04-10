@@ -1,4 +1,4 @@
-SMS service built on top of Google Voice
+SMS service built on top of Google Voice using Python 2.7, MongoDB and RabbitMQ.
 
 
 ## Installation
@@ -17,7 +17,13 @@ $ export MONGO_URI=<MONGO_URI>
 
 If not set, the following URI will be used: `mongodb://localhost:27017/sms`.
 
-You are also going to need RabbitMQ
+The web application and background worker use the environment variable `RABBIT_HOST` for connecting to RabbitMQ.
+
+```
+$ export RABBIT_HOST=<RABBIT_HOST>
+```
+
+If not set, `localhost` will be used.
 
 ## Usage
 
