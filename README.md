@@ -7,9 +7,9 @@ SMS service built on top of Google Voice
 $ pip install -r requirements.txt
 ```
 
-Add google credentials to `.gvoice`
+`pygooglevoice` creates a `.gvoice` in your home directory where you add your google credentials.
 
-The scraper uses the environment variable `MONGO_URI` for connecting to mongo.
+The scraper and web application use the environment variable `MONGO_URI` for connecting to mongo.
 
 ```
 $ export MONGO_URI=<MONGO_URI>
@@ -53,6 +53,10 @@ Get all text messages exchanged with some phone number.
 GET `/api/sms?phone=(510)%20555-5555`
 
 ```
+curl 'localhost:5000/api/sms?phone=(510)%20555-5555'
+```
+
+```json
 {
   "count": 2,
   "results": [
@@ -82,7 +86,7 @@ POST `/api/sms`
 curl -H "Content-Type: application/json" -X POST -d '{"message": "it works?", "phone": "5105555555"}' http://localhost:5000/api/sms
 ```
 
-```
+```json
 {
   "status": "success"
 }
