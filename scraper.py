@@ -60,6 +60,13 @@ def extractphone(text):
 
     return None
 
+  
+def filterNewMessages(all_messages,fetched_messages):
+    for e in range(len(fetched_messages) - 1, -1, -1):
+        if fetched_messages[e] in db_messages:
+            fetched_messages.pop(e)
+    return fetched_messages
+
 
 if __name__ == '__main__':
     # Get sms
@@ -71,10 +78,15 @@ if __name__ == '__main__':
     mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/sms')
     client = MongoClient(mongo_uri)
     db = client.get_default_database()
-
     # Insert messages to mongo
     messages = extractsms(voice.sms.html)
-    coll_result = db.messages.insert_many(messages)
-    print('Records inserted: %s' % len(coll_result.inserted_ids))
-
+    # Get messages from database
+    db_messages = list(db.messages.find({},{'_id': False}))
+    # Only insert new messages
+    new_messages = filterNewMessages(db_messages,messages)
+    if len(new_messages) > 0:
+        coll_result = db.messages.insert_many(new_messages)
+        print('Records inserted: %s' % len(coll_result.inserted_ids))
+    else:
+        print('Records inserted: %s' % 0)
     client.close()
